@@ -201,7 +201,10 @@ public class RedisCacheDao implements ICacheDao{
 			Jedis jedis = null;
 			try {
 				jedis = pool.getResource();
-				jedis.flushDB();
+				Set<String> keys=jedis.keys(config.getRedisKeyPrefix()+"*");
+				for (String key:keys){
+					jedis.del(key);
+				}
 				return true;
 			} catch (Exception e) {
 				throw e;
